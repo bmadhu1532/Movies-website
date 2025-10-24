@@ -19,7 +19,7 @@ app.use(express.json());
 
 const allowedOrigins = [
   "http://localhost:5173",             // local dev
-  "https://projectmoviesu.vercel.app"  // deployed frontend
+  "https://umoviesproject.vercel.app"  // deployed frontend
 ];
 
 app.use(cors({
