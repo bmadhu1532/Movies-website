@@ -18,7 +18,7 @@ function MovieItemDetails() {
   useEffect(() => {
     const eachMovieDetails = async () => {
       setIsLoading(true)
-      const apiUrl = `https://projectmovies-1.onrender.com/movies-app/movies/${movieId}`
+      const apiUrl = `https://umoviesproject.onrender.com/movies-app/movies/${movieId}`
       // const apiUrl = `https://apis.ccbp.in/movies-app/movies/${movieId}`
       const options = {
         method: "GET",

@@ -36,7 +36,7 @@ function AccountPage() {
 
   useEffect(()=> {
     const fetchProfile = async() => {
-      const url = "https://projectmovies-1.onrender.com/profile"
+      const url = "https://umoviesproject.onrender.com/profile"
       const options = {
         method:"GET",
         headers : {

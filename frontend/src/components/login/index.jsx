@@ -35,7 +35,7 @@ const Login = () => {
     const handleSubmitForm=async(event) =>{
         event.preventDefault();
         const userDetails = {email,password}
-        const apiUrl = "https://projectmovies-1.onrender.com/login";
+        const apiUrl = "https://umoviesproject.onrender.com/login";
         const options = {
           method:"POST",
           headers: {

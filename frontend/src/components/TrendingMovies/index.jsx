@@ -29,7 +29,7 @@ function TrendingMovies() {
         data:null,
         errorMsg:null,        
       })
-      const apiUrl = "https://projectmovies-1.onrender.com/movies-app/trending-movies"
+      const apiUrl = "https://umoviesproject.onrender.com/movies-app/trending-movies"
       const options = {
         method: "GET",
         headers: {

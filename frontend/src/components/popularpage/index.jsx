@@ -23,7 +23,7 @@ function PopularPage() {
   useEffect(()=> {
     const PopularMoviesData = async () => {
       // const apiUrl = "https://apis.ccbp.in/movies-app/popular-movies";
-      const apiUrl = "https://projectmovies-1.onrender.com/movies-app/popular-movies";
+      const apiUrl = "https://umoviesproject.onrender.com/movies-app/popular-movies";
       const options = {
         method:"GET",
         headers: {

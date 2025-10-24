@@ -28,7 +28,7 @@ function Originals() {
         data:null,
         errorMsg:null,        
       })
-      const apiUrl = "https://projectmovies-1.onrender.com/movies-app/originals"
+      const apiUrl = "https://umoviesproject.onrender.com/movies-app/originals"
       const options = {
         method: "GET",
         headers: {

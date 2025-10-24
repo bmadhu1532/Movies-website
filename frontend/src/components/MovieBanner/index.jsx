@@ -12,7 +12,7 @@ function MovieBanner() {
   useEffect(() => {
     const bannerData = async () => {
       // const apiUrl = "https://apis.ccbp.in/movies-app/top-rated-movies"
-      const apiUrl = "https://projectmovies-1.onrender.com/movies-app/top-rated-movies"
+      const apiUrl = "https://umoviesproject.onrender.com/movies-app/top-rated-movies"
       const options = {
         method: "GET",
         headers: {

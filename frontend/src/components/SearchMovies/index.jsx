@@ -36,7 +36,7 @@ function SearchMovie() {
         data:null,
         errorMsg:null,        
       })
-      const apiUrl = `https://projectmovies-1.onrender.com/movies-app/movies-search?search=${searchValue}`
+      const apiUrl = `https://umoviesproject.onrender.com/movies-app/movies-search?search=${searchValue}`
       // const apiUrl = `https://apis.ccbp.in/movies-app/movies-search?search={searchText}`
       const options = {
         method: "GET",
