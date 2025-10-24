@@ -1,0 +1,10 @@
+li {
+    list-style: none;
+}
+/* kept for legacy, layout handled by utility classes */
+.bg-container-navbar {
+    display: flex;
+}
+.ul-navbar-container {
+    display: flex;
+}
