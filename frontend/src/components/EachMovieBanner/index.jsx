@@ -1,9 +1,12 @@
 import React from "react"
 import Slider from "react-slick"
 import "slick-carousel/slick/slick.css"
+import Loading from "../Loading"
 import "slick-carousel/slick/slick-theme.css"
+import { useNavigate } from "react-router"
 
 function MovieBannerCarousel({ banners = [] }) {
+  const navigate = useNavigate()
   const settings = {
   dots: true,
   infinite: true,
@@ -22,9 +25,13 @@ function MovieBannerCarousel({ banners = [] }) {
   if (!banners || banners.length === 0) {
     return (
       <div className="flex items-center justify-center h-[90vh] bg-black text-white">
-        Loading banners...
+        <Loading height={"h-screen"} />
       </div>
     )
+  }
+
+  const handleMovieLink = (id) => {
+    navigate(`/movies-app/movies/${id}`)
   }
 
   return (
@@ -50,8 +57,8 @@ function MovieBannerCarousel({ banners = [] }) {
               <p className="text-lg text-gray-200 mb-4 line-clamp-3">
                 {banner.overview}
               </p>
-              <button className="bg-white text-black px-6 py-2 rounded-md font-semibold hover:bg-gray-200 transition">
-                Play
+              <button onClick={()=>handleMovieLink(banner.id)} className="bg-white text-black px-6 py-2 rounded-md font-semibold hover:bg-gray-200 transition">
+                View Details
               </button>
             </div>
           </div>
