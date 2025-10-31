@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
 import MovieItem from '../MovieItem'
 import Loading from '../Loading'
-import { FaGoogle, FaInstagram, FaTwitter, FaYoutube } from "react-icons/fa";
+import { FaGoogle, FaInstagram, FaTwitter, FaYoutube , FaPlay } from "react-icons/fa";
 import Cookies from 'js-cookie'
 
 function MovieItemDetails() {
@@ -46,7 +46,8 @@ function MovieItemDetails() {
           voteCount: movieDetails.vote_count,
           genres: movieDetails.genres,
           spokenLanguages: movieDetails.spoken_languages,
-          similarMovies: movieDetails.similar_movies
+          similarMovies: movieDetails.similar_movies,
+          movieLink : movieDetails.movieLink
         }
         setUniqueMovie(formattedMovieDetails)
         setGenres(formattedMovieDetails.genres)
@@ -57,6 +58,10 @@ function MovieItemDetails() {
     }
     eachMovieDetails()
   }, [movieId, jwtToken])
+
+  const handleMovieVideo = () => {
+    window.open(uniqueMovie.movieLink)
+  }
 
   return (
     <div>
@@ -89,8 +94,13 @@ function MovieItemDetails() {
               <p className="text-gray-300 text-xs sm:text-base mb-4 line-clamp-3 sm:line-clamp-4">
                 {uniqueMovie.overview}
               </p>
-              <button className="bg-white text-black px-6 py-2 rounded-lg font-semibold hover:bg-gray-200 transition">
-                Play
+              <button onClick={handleMovieVideo} className="bg-white text-black px-6 py-2 rounded-lg font-semibold hover:bg-gray-200 transition">
+                <div className='flex'>
+                  <div className='mt-1'>
+                    <FaPlay />
+                  </div>
+                  <span className='ml-2'>Play</span>
+                </div>
               </button>
             </div>
           </div>
