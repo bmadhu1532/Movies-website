@@ -59,9 +59,9 @@ function MovieItemDetails() {
     eachMovieDetails()
   }, [movieId, jwtToken])
 
-  const handleMovieVideo = () => {
-    window.open(uniqueMovie.movieLink)
-  }
+  // const handleMovieVideo = () => {
+  //   window.open(uniqueMovie.movieLink)
+  // }
 
   return (
     <div>
@@ -94,7 +94,7 @@ function MovieItemDetails() {
               <p className="text-gray-300 text-xs sm:text-base mb-4 line-clamp-3 sm:line-clamp-4">
                 {uniqueMovie.overview}
               </p>
-              <button onClick={handleMovieVideo} className="bg-white text-black px-6 py-2 rounded-lg font-semibold hover:bg-gray-200 transition">
+              <button className="bg-white text-black px-6 py-2 rounded-lg font-semibold hover:bg-gray-200 transition">
                 <div className='flex'>
                   <div className='mt-1'>
                     <FaPlay />
