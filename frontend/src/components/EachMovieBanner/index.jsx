@@ -3,10 +3,10 @@ import Slider from "react-slick"
 import "slick-carousel/slick/slick.css"
 import Loading from "../Loading"
 import "slick-carousel/slick/slick-theme.css"
-// import { useNavigate } from "react-router"
+import { useNavigate } from "react-router"
 
 function MovieBannerCarousel({ banners = [] }) {
-  // const navigate = useNavigate()
+  const navigate = useNavigate()
   const settings = {
   dots: true,
   infinite: true,
@@ -30,7 +30,9 @@ function MovieBannerCarousel({ banners = [] }) {
     )
   }
 
-
+  const handleEachmovie = (id) => {
+    navigate(`/movies-app/movies/${id}`)
+  }
 
   return (
     <div className="relative w-full h-[95vh] overflow-hidden">
@@ -55,7 +57,7 @@ function MovieBannerCarousel({ banners = [] }) {
               <p className="text-lg text-gray-200 mb-4 line-clamp-3">
                 {banner.overview}
               </p>
-              <button className="bg-white text-black px-6 py-2 rounded-md font-semibold hover:bg-gray-200 transition">
+              <button onClick={()=>handleEachmovie(banner.id)} className="bg-white text-black px-6 py-2 rounded-md font-semibold hover:bg-gray-200 transition">
                 View Details
               </button>
             </div>
