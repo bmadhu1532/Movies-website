@@ -59,21 +59,21 @@ const Register = () => {
             console.log('Database registration successful:', backendData);
 
             // Then, send to webhook for automation
-            const webhookUrl = "http://localhost:5678/webhook-test/8bb676a8-ba1d-4b7d-abc0-5c64c4cbc63a";
-            const webhookResponse = await fetch(webhookUrl, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(userDetails)
-            });
+            // const webhookUrl = "http://localhost:5678/webhook-test/8bb676a8-ba1d-4b7d-abc0-5c64c4cbc63a";
+            // const webhookResponse = await fetch(webhookUrl, {
+            //     method: "POST",
+            //     headers: {
+            //         "Content-Type": "application/json"
+            //     },
+            //     body: JSON.stringify(userDetails)
+            // });
 
-            if (webhookResponse.ok) {
-                const webhookData = await webhookResponse.json();
-                console.log('Webhook automation successful:', webhookData);
-            } else {
-                console.warn('Webhook failed but user is registered in database');
-            }
+            // if (webhookResponse.ok) {
+            //     const webhookData = await webhookResponse.json();
+            //     console.log('Webhook automation successful:', webhookData);
+            // } else {
+            //     console.warn('Webhook failed but user is registered in database');
+            // }
 
             onSubmitSuccess();
             
