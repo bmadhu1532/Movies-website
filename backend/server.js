@@ -88,15 +88,18 @@ app.post("/register", async (req, res) => {
 
     const webhookURL = process.env.N8N_WEBHOOK_URL;
     if (webhookURL) {
-      try {
-        await axios.post(
+      axios
+        .post(
           webhookURL,
           { username, email },
-          { headers: { "Content-Type": "application/json" }, timeout: 5000 }
-        );
-      } catch (err) {
-        console.error("n8n webhook error:", err.message);
-      }
+          { headers: { "Content-Type": "application/json" }, timeout: 10000 }
+        )
+        .then((resp) => {
+          console.log("n8n webhook success:", resp.status);
+        })
+        .catch((err) => {
+          console.error("n8n webhook error:", err.message);
+        });
     }
 
     res.status(201).json({
