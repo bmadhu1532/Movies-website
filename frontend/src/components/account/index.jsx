@@ -22,7 +22,7 @@ function AccountPage() {
     }
   }
 
-  Cookies.remove("jwt_token")
+  // Cookies.remove("jwt_token")
 
 
   useEffect(()=> {
