@@ -62,7 +62,7 @@ const Register = () => {
 
             console.log('Database registration successful:', backendData);
 
-            const webhookUrl = "http://localhost:5678/webhook-test/8bb676a8-ba1d-4b7d-abc0-5c64c4cbc63a";
+            const webhookUrl = "http://localhost:5678/webhook/8bb676a8-ba1d-4b7d-abc0-5c64c4cbc63a";
             if (webhookUrl) {
                 const payload = {
                     username,
