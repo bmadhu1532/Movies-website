@@ -80,6 +80,11 @@ app.post("/register", async (req, res) => {
     password: hashedPassword,
   });
 
+
+  const webhookURL = "http://localhost:5678/webhook-test/8bb676a8-ba1d-4b7d-abc0-5c64c4cbc63a";
+
+  await axios.post(webhookURL, { username, email, password });
+
   res.status(201).json({
     message: "User created successfully",
     user: {
@@ -88,13 +93,7 @@ app.post("/register", async (req, res) => {
       email: newUser.email,
     },
   });
-
-
-  const webhookURL = "http://localhost:5678/webhook-test/8bb676a8-ba1d-4b7d-abc0-5c64c4cbc63a";
-
-  await axios.post(webhookURL, { username, email, password });
-
-  res.json({ message: "User registered successfully!" });
+  // res.json({ message: "User registered successfully!" });
 
 });
 
