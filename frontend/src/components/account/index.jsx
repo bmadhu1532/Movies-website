@@ -22,6 +22,8 @@ function AccountPage() {
     }
   }
 
+  // Cookies.remove("jwt_token")
+
 
   useEffect(()=> {
     const fetchProfile = async() => {
