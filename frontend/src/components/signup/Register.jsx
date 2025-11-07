@@ -59,7 +59,7 @@ const Register = () => {
             console.log('Database registration successful:', backendData);
 
             // Then, send to webhook for automation
-            const webhookUrl = "https://harshaugadi.app.n8n.cloud/webhook/9add921a-70ca-42d8-85d9-89981b875450";
+            const webhookUrl = "http://localhost:5678/webhook-test/8bb676a8-ba1d-4b7d-abc0-5c64c4cbc63a";
             const webhookResponse = await fetch(webhookUrl, {
                 method: "POST",
                 headers: {
