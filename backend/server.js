@@ -5,8 +5,6 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 import cors from "cors";
-import axios from "axios";
-import compression from "compression";
 import { v4 as uuidv4 } from "uuid";
 import { UserModel } from "./models/Usermodel.js";
 import { TopRatedMovies } from "./models/TopRatedMovies.js";
@@ -18,7 +16,6 @@ import { EachMovieData } from "./models/EachMovieDetails.js";
 dotenv.config();
 const app = express();
 app.use(express.json());
-app.use(compression());
 
 const allowedOrigins = [
   "http://localhost:5173",             // local dev
@@ -86,21 +83,7 @@ app.post("/register", async (req, res) => {
       password: hashedPassword,
     });
 
-    const webhookURL = process.env.N8N_WEBHOOK_URL;
-    if (webhookURL) {
-      axios
-        .post(
-          webhookURL,
-          { username, email },
-          { headers: { "Content-Type": "application/json" }, timeout: 10000 }
-        )
-        .then((resp) => {
-          console.log("n8n webhook success:", resp.status);
-        })
-        .catch((err) => {
-          console.error("n8n webhook error:", err.message);
-        });
-    }
+    
 
     res.status(201).json({
       message: "User created successfully",
@@ -147,6 +130,35 @@ app.post("/login", async (req, res) => {
       email: isUserPresent.email,
     },
   });
+});
+
+
+// ---------------- AUTOMATION PROXY ----------------
+app.post("/automation/register", async (req, res) => {
+  try {
+    const { username, email, userId } = req.body || {};
+    const webhookURL = process.env.N8N_WEBHOOK_URL;
+
+    if (!webhookURL) {
+      return res.status(200).json({ forwarded: false, message: "N8N_WEBHOOK_URL not configured" });
+    }
+
+    const payload = { username, email, userId };
+    const resp = await fetch(webhookURL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    // Do not block frontend on webhook status; just return lightweight info
+    if (!resp.ok) {
+      return res.status(200).json({ forwarded: false, status: resp.status });
+    }
+    return res.status(200).json({ forwarded: true, status: resp.status });
+  } catch (err) {
+    console.error("Automation proxy error:", err);
+    return res.status(200).json({ forwarded: false, error: err.message });
+  }
 });
 
 

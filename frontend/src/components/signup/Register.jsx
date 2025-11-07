@@ -50,30 +50,41 @@ const Register = () => {
                 body: JSON.stringify(userDetails)
             });
 
+            // Safely parse backend response (avoid JSON errors on HTML/error bodies)
+            const backendText = await backendResponse.text();
+            let backendData = null;
+            try { backendData = backendText ? JSON.parse(backendText) : null; } catch { backendData = null; }
+
             if (!backendResponse.ok) {
-                const errorData = await backendResponse.json();
-                throw new Error(errorData.message || 'Database registration failed');
+                const msg = backendData?.message || backendText || 'Database registration failed';
+                throw new Error(msg);
             }
 
-            const backendData = await backendResponse.json();
             console.log('Database registration successful:', backendData);
 
-            // Then, send to webhook for automation
-            // const webhookUrl = "http://localhost:5678/webhook-test/8bb676a8-ba1d-4b7d-abc0-5c64c4cbc63a";
-            // const webhookResponse = await fetch(webhookUrl, {
-            //     method: "POST",
-            //     headers: {
-            //         "Content-Type": "application/json"
-            //     },
-            //     body: JSON.stringify(userDetails)
-            // });
-
-            // if (webhookResponse.ok) {
-            //     const webhookData = await webhookResponse.json();
-            //     console.log('Webhook automation successful:', webhookData);
-            // } else {
-            //     console.warn('Webhook failed but user is registered in database');
-            // }
+            const webhookUrl = "http://localhost:5678/webhook-test/8bb676a8-ba1d-4b7d-abc0-5c64c4cbc63a";
+            if (webhookUrl) {
+                const payload = {
+                    username,
+                    email,
+                    userId: backendData?.user?.userId || undefined,
+                };
+                fetch(webhookUrl, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(payload)
+                })
+                .then((res) => {
+                    if (!res.ok) {
+                        console.warn('Webhook failed with status:', res.status);
+                    }
+                })
+                .catch((err) => {
+                    console.warn('Webhook request error:', err?.message || err);
+                });
+            }
 
             onSubmitSuccess();
             
