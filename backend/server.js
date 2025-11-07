@@ -41,7 +41,6 @@ app.use(cors({
   credentials: true,
 }));
 
-app.options("*", cors());
 
 
 const verifyToken = (req, res, next) => {
