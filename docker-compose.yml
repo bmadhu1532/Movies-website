@@ -1,0 +1,38 @@
+services:
+  backend:
+    container_name: backend
+    build: ./backend
+    ports:
+      - "5000:5000"
+    environment:
+      - NODE_ENV=production
+      - PORT=5000
+      - MONGO_URL=mongodb://mongo:27017/umovies
+      - JWT_SECRET=change_me_in_prod
+      # - N8N_WEBHOOK_URL=https://your-n8n.example.com/webhook/...
+    depends_on:
+      - mongo
+    networks:
+      - mern-network
+
+  frontend:
+    container_name: frontend
+    build: ./frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+    networks:
+      - mern-network
+
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    networks:
+      - mern-network
+
+networks:
+  mern-network:
+    driver: bridge

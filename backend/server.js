@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 import cors from "cors";
+import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 import { UserModel } from "./models/Usermodel.js";
 import { TopRatedMovies } from "./models/TopRatedMovies.js";
@@ -14,30 +15,19 @@ import { PopularMoviesData } from "./models/Popular.js";
 import { EachMovieData } from "./models/EachMovieDetails.js";
 
 dotenv.config();
+
+// --- Global CORS (allow all) ---
+// app.use(cors());
+
 const app = express();
-app.use(express.json());
 
-const allowedOrigins = [
-  "http://localhost:5173",             // local dev
-  "http://localhost:5174",
-  "https://umoviesproject.vercel.app"  // deployed frontend
-];
-
+// Allow frontend requests
 app.use(cors({
-  origin: function (origin, callback) {
-    // allow requests with no origin (like Postman)
-    if (!origin) return callback(null, true);
-
-    if (allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  credentials: true,
+  origin: ["http://localhost:5173", "https://umoviesproject.onrender.com"],
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true
 }));
-
+app.use(express.json());
 
 
 const verifyToken = (req, res, next) => {
@@ -144,14 +134,14 @@ app.post("/automation/register", async (req, res) => {
     }
 
     const payload = { username, email, userId };
-    const resp = await fetch(webhookURL, {
-      method: "POST",
+    // Use axios to avoid relying on global fetch availability
+    const resp = await axios.post(webhookURL, payload, {
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
+      validateStatus: () => true, // always resolve; we map status below
     });
 
     // Do not block frontend on webhook status; just return lightweight info
-    if (!resp.ok) {
+    if (resp.status < 200 || resp.status >= 300) {
       return res.status(200).json({ forwarded: false, status: resp.status });
     }
     return res.status(200).json({ forwarded: true, status: resp.status });
@@ -272,17 +262,23 @@ app.use((err, req, res, next) => {
 
 
 // ---------------- MONGODB CONNECTION ----------------
-async function connection() {
+async function connection(withRetry = true) {
   try {
     await mongoose.connect(process.env.MONGO_URL);
     console.log("MongoDB connected");
-    const PORT = process.env.PORT || 7899;
+    const PORT = process.env.PORT || 5000;
     app.listen(PORT, () => {
       console.log(`Server is running at port no : ${PORT}`);
     });
   } catch (err) {
-    console.log("MongoDB connection Error:", err);
-    process.exit(1);
+    console.log("MongoDB connection Error:", err?.message || err);
+    if (withRetry) {
+      const delayMs = 3000;
+      console.log(`Retrying MongoDB connection in ${delayMs / 1000}s...`);
+      setTimeout(() => connection(withRetry), delayMs);
+    } else {
+      process.exit(1);
+    }
   }
 }
-connection();
+connection(true);

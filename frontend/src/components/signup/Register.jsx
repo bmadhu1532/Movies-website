@@ -42,7 +42,7 @@ const Register = () => {
             const userDetails = {username,email,password}
             
             // First, save to MongoDB via your backend API
-            const backendResponse = await fetch('https://umoviesproject.onrender.com/register', {
+            const backendResponse = await fetch('http://localhost:5000/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
