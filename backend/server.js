@@ -23,7 +23,7 @@ const app = express();
 
 // Allow frontend requests
 app.use(cors({
-  origin: ["http://localhost:5173", "https://umoviesproject.onrender.com"],
+  origin: ["http://13.56.230.178:5173", "https://umoviesproject.onrender.com"],
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
 }));

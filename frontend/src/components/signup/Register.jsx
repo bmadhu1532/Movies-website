@@ -42,7 +42,7 @@ const Register = () => {
             const userDetails = {username,email,password}
             
             // First, save to MongoDB via your backend API
-            const backendResponse = await fetch('http://localhost:5000/register', {
+            const backendResponse = await fetch('http://13.56.230.178:5000/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -62,7 +62,7 @@ const Register = () => {
 
             console.log('Database registration successful:', backendData);
 
-            const webhookUrl = "http://localhost:5678/webhook/8bb676a8-ba1d-4b7d-abc0-5c64c4cbc63a";
+            const webhookUrl = "http://13.56.230.178:5678/webhook/8bb676a8-ba1d-4b7d-abc0-5c64c4cbc63a";
             if (webhookUrl) {
                 const payload = {
                     username,
