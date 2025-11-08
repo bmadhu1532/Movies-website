@@ -22,13 +22,42 @@ dotenv.config();
 const app = express();
 
 // Allow frontend requests
-app.use(cors({
-  origin: ["http://13.56.230.178:5173", "https://umoviesproject.onrender.com"],
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  credentials: true
-}));
+const allowedOrigins = [
+  "http://13.56.230.178:5173",
+];
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) return callback(null, true);
+    return callback(new Error("Not allowed by CORS"));
+  },
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  credentials: true,
+  optionsSuccessStatus: 204,
+};
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
 app.use(express.json());
 
+// Explicit CORS headers as a safety net
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  const allowed = ["http://13.56.230.178:5173"];
+  if (origin && allowed.includes(origin)) {
+    res.header("Access-Control-Allow-Origin", origin);
+    res.header("Vary", "Origin");
+    res.header("Access-Control-Allow-Credentials", "true");
+    res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    res.header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
+  }
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(204);
+  }
+  next();
+});
+
+// Route-specific preflight for /login (safety)
+app.options("/login", cors(corsOptions), (req, res) => res.sendStatus(204));
 
 const verifyToken = (req, res, next) => {
   const token = req.headers.authorization?.split(" ")[1];
