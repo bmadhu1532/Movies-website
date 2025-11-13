@@ -16,15 +16,33 @@ import { EachMovieData } from "./models/EachMovieDetails.js";
 
 dotenv.config();
 
+if (!process.env.JWT_SECRET) {
+  throw new Error("JWT_SECRET environment variable is required");
+}
+
+if (!process.env.MONGO_URL) {
+  throw new Error("MONGO_URL environment variable is required");
+}
+
 // --- Global CORS (allow all) ---
 // app.use(cors());
 
 const app = express();
 
 // Allow frontend requests
-const allowedOrigins = [
+const defaultOrigins = [
   "http://13.56.230.178:5173",
+  "https://13.56.230.178:5173",
+  "http://localhost:5173",
+  "http://127.0.0.1:5173",
 ];
+const envOrigins = (process.env.ALLOWED_ORIGINS || "")
+  .split(",")
+  .map((s) => s.trim())
+  .filter(Boolean);
+const allowedOrigins = Array.from(new Set([
+  ...envOrigins.length ? envOrigins : defaultOrigins
+]));
 const corsOptions = {
   origin: (origin, callback) => {
     if (!origin) return callback(null, true);
@@ -41,8 +59,7 @@ app.use(express.json());
 // Explicit CORS headers as a safety net
 app.use((req, res, next) => {
   const origin = req.headers.origin;
-  const allowed = ["http://13.56.230.178:5173"];
-  if (origin && allowed.includes(origin)) {
+  if (origin && allowedOrigins.includes(origin)) {
     res.header("Access-Control-Allow-Origin", origin);
     res.header("Vary", "Origin");
     res.header("Access-Control-Allow-Credentials", "true");
@@ -292,6 +309,12 @@ app.use((err, req, res, next) => {
 // ---------------- MONGODB CONNECTION ----------------
 async function connection(withRetry = true) {
   try {
+    if (!process.env.MONGO_URL) {
+      console.error("MONGO_URL is not set");
+    }
+    if (!process.env.JWT_SECRET) {
+      console.error("JWT_SECRET is not set");
+    }
     await mongoose.connect(process.env.MONGO_URL);
     console.log("MongoDB connected");
     const PORT = process.env.PORT || 5000;
